@@ -9,7 +9,7 @@ from io import BytesIO, StringIO
 app = Flask(__name__)
 
 
-# Function to clean and tidy data
+# Funkcija za chistenje na skrapiranite podatoci pred da bidat vneseni vo dokument.
 def clean_data(data):
     if isinstance(data, list):
         cleaned_list = []
@@ -30,7 +30,7 @@ def clean_data(data):
     return data
 
 
-# Function to scrape the entire webpage and return scraped HTML elements
+# Funkcija za skrapiranje na celiot website i vrakjanje na skrapiranite html elementi
 def scrape_entire_webpage(url):
     try:
         print(f"Scraping URL: {url}")  # Debug print statement
