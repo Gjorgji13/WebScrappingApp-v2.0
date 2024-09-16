@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Web Scraper</title>
+    <style>
+        .element-container {
+            margin: 10px 0;
+        }
+        .element-title {
+            cursor: pointer;
+            font-weight: bold;
+            background-color: #f1f1f1;
+            padding: 10px;
+            border: 1px solid #ccc;
+        }
+        .element-content {
+            display: none;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-top: none;
+        }
+        #backButton {
+            display: none;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+
+<h1>Website Content Viewer</h1>
+
+<form id="scrapeForm">
+    <input type="text" id="url" name="url" placeholder="Enter the URL" required>
+    <button type="submit">Load Website Content</button>
+</form>
+
+<button id="backButton">Go Back</button>
+
+<div id="results"></div>
+
+<script>
+    // Retrieve the saved URL and content from localStorage if they exist
+    window.onload = function() {
+        const savedUrl = localStorage.getItem('url');
+        const savedContent = localStorage.getItem('scrapedContent');
+
+        if (savedUrl) {
+            document.getElementById('url').value = savedUrl;
+        }
+
+        if (savedContent) {
+            document.getElementById('results').innerHTML = savedContent;
+            document.getElementById('backButton').style.display = 'block'; // Show the back button if there is content
+        }
+    };
+
+    // Handle form submission and save the URL and scraped content in localStorage
+    document.getElementById('scrapeForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+        const formData = new FormData(this);
+        const url = document.getElementById('url').value;
+
+
+        localStorage.setItem('url', url);  // Save the URL to localStorage
+
+        fetch('/scrape', {
+            method: 'POST',
+            body: formData,
+        })
+        .then(response => response.text())  // Expect HTML response
+        .then(data => {
+            localStorage.setItem('scrapedContent', data);    // Save the scraped content in localStorage
+
+
+            // Display the new scraped content
+            document.getElementById('results').innerHTML = data;
+
+            // Show the back button
+            document.getElementById('backButton').style.display = 'block';
+        })
+        .catch(error => console.error('Error:', error));
+    });
+
+    // Handle "Go Back" button click
+    document.getElementById('backButton').addEventListener('click', function() {
+        // Retrieve the saved content from localStorage
+        const savedContent = localStorage.getItem('scrapedContent');
+
+        if (savedContent) {
+            document.getElementById('results').innerHTML = savedContent; // Restore the previous content
+        }
+
+        // Hide the back button (optional, depending on your desired behavior)
+        this.style.display = 'none';
+    });
+</script>
+
+</body>
+</html>

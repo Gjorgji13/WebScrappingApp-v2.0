@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Scraped Results</title>
+</head>
+<body>
+    <h1>Scraped Results for {{ url }}</h1>
+    <form action="/search" method="POST">
+        <input type="hidden" name="url" value="{{ url }}">
+        <input type="text" name="search_query" placeholder="Search for an element">
+        <button type="submit">Search</button>
+    </form>
+    <ul>
+        {% for key, value in elements.items() %}
+        <li>
+            <a href="{{ url_for('show_element', element_type=key, url=url) }}">{{ key }}</a>
+        </li>
+        {% endfor %}
+    </ul>
+    <form action="/download_csv" method="post">
+        <input type="hidden" name="url" value="{{ url }}">
+        <button type="submit">Download CSV</button>
+    </form>
+    <form action="/download_excel" method="post">
+        <input type="hidden" name="url" value="{{ url }}">
+        <button type="submit">Download Excel</button>
+    </form>
+</body>
+</html>

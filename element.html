@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ element_type }} Content</title>
+</head>
+<body>
+    <h1>{{ element_type }} Content</h1>
+    <div>
+        {% if element_content %}
+        {% if element_type == "Links" %}
+        <ul>
+            {% for item in element_content %}
+            <li><a href="{{ item[1] }}">{{ item[0] }}</a></li>
+            {% endfor %}
+        </ul>
+        {% elif element_type == "Images" %}
+        <ul>
+            {% for item in element_content %}
+            <li><img src="{{ item }}" alt="Image"></li>
+            {% endfor %}
+        </ul>
+        {% elif element_type == "Paragraphs" %}
+        {% for item in element_content %}
+        <p>{{ item }}</p>
+        {% endfor %}
+        {% elif element_type == "Lists" %}
+        <ul>
+            {% for sublist in element_content %}
+            <li>
+                <ul>
+                    {% for li in sublist %}
+                    <li>{{ li }}</li>
+                    {% endfor %}
+                </ul>
+            </li>
+            {% endfor %}
+        </ul>
+        {% elif element_type == "Tables" %}
+        <table border="1">
+            {% for row in element_content %}
+            <tr>
+                {% for cell in row %}
+                <td>{{ cell }}</td>
+                {% endfor %}
+            </tr>
+            {% endfor %}
+        </table>
+        {% else %}
+        <ul>
+            {% for item in element_content %}
+            <li>{{ item }}</li>
+            {% endfor %}
+        </ul>
+        {% endif %}
+        {% else %}
+        <p>No content found for this element.</p>
+        {% endif %}
+    </div>
+    <a href="/">Go Back</a>
+</body>
+</html>
